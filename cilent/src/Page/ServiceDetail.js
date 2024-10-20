@@ -7,12 +7,11 @@ import { useParams } from 'react-router-dom';
 
 function ServiceDetail() {
   const [serviceDetail, setServiceDetail] = useState({});
-  const [pricingPlans, setPricingPlans] = useState([]); // Thêm state để lưu các gói tập
   const { id } = useParams();
 
   // Fetch service details by ID
   useEffect(() => {
-      const fetchGymPackagesById = async () => {
+      const fetchServiceDetailById = async () => {
           try {
               const response = await fetch(`http://localhost:3002/service/getService/${id}`);
               const data = await response.json();
@@ -22,20 +21,18 @@ function ServiceDetail() {
           }
       };
 
-    
-      fetchGymPackagesById();
-     // Gọi API lấy các gói tập theo serviceId
+      fetchServiceDetailById();
   }, [id]);
 
-  const { image, packageName } = serviceDetail;
+  const { image, packageName, content } = serviceDetail;
 
   return (
       <div className="bg-custom text-white">
           <BannerService image={image} packageName={packageName} />
-          <ServiceDetailFeature />
-          <PricingSection/>
-          <MembershipTable/>
-           {/* Truyền dữ liệu gói tập vào PricingSection */}
+
+          <ServiceDetailFeature content={content}/>
+          <PricingSection />
+          <MembershipTable />
       </div>
   );
 }
