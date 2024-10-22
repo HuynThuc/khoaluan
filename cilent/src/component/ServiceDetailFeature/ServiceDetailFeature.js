@@ -7,7 +7,7 @@ import parse from 'html-react-parser';
 
 const ServiceDetailFeature = ({ content }) => {
   return (
-    <section className="bg-white py-20 mt-28">
+    <section className="bg-white ">
       <div className="container mx-auto">
         <div className="container mx-auto py-8 px-60 bg-white text-black">
           <h2 className="text-3xl font-semibold mb-4 text-center">Mô tả dịch vụ</h2>

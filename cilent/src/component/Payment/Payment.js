@@ -13,9 +13,12 @@ export default function PaymentForm() {
   const location = useLocation();
   const planId = location.state?.planId;
   const price = location.state?.price;
+  const serviceId = location.state?.serviceId; 
 
   const { user } = useContext(AuthContext);
   console.log("Current user:", price);
+  console.log("Serviceid", serviceId);
+  console.log("Serviceid", planId);
 
 
 

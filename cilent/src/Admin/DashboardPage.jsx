@@ -67,7 +67,7 @@ const DashboardPage = () => {
     const [category, setCategories] = useState([]);
     const [gymPackage, setGymPackage] = useState([]);
     const [service, setService] = useState([]);
-   
+
 
     const statusColors = {
         'Đang xử lý': 'bg-yellow-200 text-yellow-800',
@@ -79,7 +79,7 @@ const DashboardPage = () => {
 
 
     const validatePrice = (_, value) => {
-        if (value < 0) {                    
+        if (value < 0) {
             return Promise.reject(new Error('Vui lòng nhập giá hợp lệ!'));
         }
         return Promise.resolve();
@@ -87,52 +87,52 @@ const DashboardPage = () => {
 
     const fetchService = async () => {
         console.log("Fetching gym packages..."); // Kiểm tra xem đoạn code có chạy đến đây không
-        
+
         try {
-          const response = await fetch('http://localhost:3002/service/getAllServices');
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          
-          const data = await response.json();
-          console.log("Fetched data:", data); // Kiểm tra dữ liệu trả về
-          setService(data);
+            const response = await fetch('http://localhost:3002/service/getAllServices');
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Fetched data:", data); // Kiểm tra dữ liệu trả về
+            setService(data);
         } catch (error) {
-          console.error("Error fetching gym packages:", error);
+            console.error("Error fetching gym packages:", error);
         }
-      };
+    };
 
     useEffect(() => {
         fetchService();
-      }, []);
+    }, []);
 
 
-      //Lấy package
-      const fetchGymPackage= async () => {
+    //Lấy package
+    const fetchGymPackage = async () => {
         console.log("Fetching gym packages..."); // Kiểm tra xem đoạn code có chạy đến đây không
-        
+
         try {
-          const response = await fetch('http://localhost:3002/gymPackage/getAllPackage');
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          
-          const data = await response.json();
-          console.log("Fetched data:", data); // Kiểm tra dữ liệu trả về
-          setGymPackage(data);
+            const response = await fetch('http://localhost:3002/gymPackage/getAllPackage');
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Fetched data:", data); // Kiểm tra dữ liệu trả về
+            setGymPackage(data);
         } catch (error) {
-          console.error("Error fetching gym packages:", error);
+            console.error("Error fetching gym packages:", error);
         }
-      };
+    };
 
     useEffect(() => {
         fetchGymPackage();
-      }, []);
+    }, []);
 
-     //Thêm loại sản phẩm
-     const addService = async (serviceData) => {
+    //Thêm loại sản phẩm
+    const addService = async (serviceData) => {
         try {
             const response = await axios.post('http://localhost:3002/service/addService', serviceData, {
                 headers: {
@@ -141,7 +141,7 @@ const DashboardPage = () => {
             });
             // Xử lý khi request thành công
             console.log('Thêm thành công:', response.data);
-            
+
             // Cập nhật state hoặc thực hiện các hành động khác sau khi thêm thành công
             // Tải lại danh sách dịch vụ
         } catch (error) {
@@ -154,25 +154,25 @@ const DashboardPage = () => {
 
     //Thêm gói tập
     // Thêm gói tập
-const addGymPackage = async (gymPackageData) => {
-    try {
-        const response = await axios.post('http://localhost:3002/gymPackage/addGymPackage', gymPackageData, {
-            headers: {
-                'Content-Type': 'application/json' // Đảm bảo header Content-Type là application/json khi gửi JSON
-            }
-        });
-        // Xử lý khi request thành công
-        console.log('Thêm thành công:', response.data);
-        
-        // Cập nhật state hoặc thực hiện các hành động khác sau khi thêm thành công
-        // Tải lại danh sách dịch vụ
-    } catch (error) {
-        // Xử lý khi có lỗi xảy ra
-        console.error('Lỗi khi thêm:', error);
-    }
-};
+    const addGymPackage = async (gymPackageData) => {
+        try {
+            const response = await axios.post('http://localhost:3002/gymPackage/addGymPackage', gymPackageData, {
+                headers: {
+                    'Content-Type': 'application/json' // Đảm bảo header Content-Type là application/json khi gửi JSON
+                }
+            });
+            // Xử lý khi request thành công
+            console.log('Thêm thành công:', response.data);
 
-    
+            // Cập nhật state hoặc thực hiện các hành động khác sau khi thêm thành công
+            // Tải lại danh sách dịch vụ
+        } catch (error) {
+            // Xử lý khi có lỗi xảy ra
+            console.error('Lỗi khi thêm:', error);
+        }
+    };
+
+
 
     //nút edit
     const handleEdit = (record) => {
@@ -182,7 +182,7 @@ const addGymPackage = async (gymPackageData) => {
     };
 
     // Khi nhấn vào nút Order
-   
+
     //nút xóa
     const handleDelete = (record) => {
         setRecordToDelete(record);
@@ -194,7 +194,7 @@ const addGymPackage = async (gymPackageData) => {
         setOrderModalVisible(false);
     };
 
-   
+
 
 
     //nút ok khi thêm 
@@ -209,10 +209,10 @@ const addGymPackage = async (gymPackageData) => {
                     description: values.description,
                     serviceId: values.serviceId
                 };
-            
+
                 // Gọi hàm addGymPackage với đối tượng gymPackageData
                 addGymPackage(gymPackageData);
-                
+
                 // Gọi hàm để tải lại danh sách gói tập
                 fetchGymPackage();
 
@@ -221,6 +221,7 @@ const addGymPackage = async (gymPackageData) => {
                 serviceData.append('serviceName', values.serviceName);
                 serviceData.append('description', values.description);
                 serviceData.append('content', values.content);
+                serviceData.append('layout', values.layout);
                 // Kiểm tra và thêm tệp ảnh nếu có
                 if (values.file && values.file.fileList && values.file.fileList.length > 0) {
                     serviceData.append('image', values.file.fileList[0].originFileObj); // Thêm tệp ảnh từ fileList
@@ -246,12 +247,12 @@ const addGymPackage = async (gymPackageData) => {
                 // Xóa dữ liệu từ server
                 switch (selectedMenuKey) {
                     case 'sub2-1':
-                       
+
 
                         // Xóa người dùng
                         break;
                     case 'sub2-2':
-                      
+
 
                         // Xóa người dùng
                         break;
@@ -296,7 +297,7 @@ const addGymPackage = async (gymPackageData) => {
             default:
                 break;
         }
-    }, [selectedMenuKey,service, products, service]);
+    }, [selectedMenuKey, service, products, service]);
 
     const handleAddNewRecord = () => {
         setAddModalVisible(true);
@@ -323,7 +324,7 @@ const addGymPackage = async (gymPackageData) => {
 
             ),
         },
-       
+
         {
             title: 'Actions',
             dataIndex: '',
@@ -452,7 +453,7 @@ const addGymPackage = async (gymPackageData) => {
                 if (record.status === 'Hoàn thành') {
                     return null; // Không hiển thị gì cả
                 }
-    
+
                 // Nếu trạng thái không phải là 'Hoàn thành', hiển thị các nút Order và Delete
                 return (
                     <span>
@@ -460,7 +461,7 @@ const addGymPackage = async (gymPackageData) => {
                             type="link"
                             icon={<EditOutlined />}
                             style={{ marginRight: 16 }}
-                            // onClick={() => handleOrder(record)}
+                        // onClick={() => handleOrder(record)}
                         >
                             Order
                         </Button>
@@ -476,7 +477,7 @@ const addGymPackage = async (gymPackageData) => {
             },
         },
     ];
-    
+
 
 
     //lấy bảng
@@ -504,7 +505,7 @@ const addGymPackage = async (gymPackageData) => {
         <Layout>
             <Header style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="demo-logo">
-                    <img  alt="Logo" style={{ width: '200px', marginTop: '20px' }} />
+                    <img alt="Logo" style={{ width: '200px', marginTop: '20px' }} />
                 </div>
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} style={{ flex: 1, minWidth: 0 }} />
                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -592,7 +593,7 @@ const addGymPackage = async (gymPackageData) => {
                             >
                                 <Select
                                     placeholder="Chọn loại sản phẩm"
-                                    
+
                                 >
                                     {category.map((category) => (
                                         <Option key={category.id_loaisanpham} value={category.id_loaisanpham}>
@@ -657,8 +658,6 @@ const addGymPackage = async (gymPackageData) => {
                             <Form.Item name="description" label="Mô tả" rules={[{ required: true, message: 'Please input the description!' }]}>
                                 {/* Use ReactQuill for rich text editor */}
                                 <ReactQuill
-
-
                                     placeholder="Mô tả sản phẩm"
                                 />
                             </Form.Item>
@@ -672,7 +671,7 @@ const addGymPackage = async (gymPackageData) => {
                             >
                                 <Input type="number" />
                             </Form.Item>
-                            {/* <Form.Item
+                            <Form.Item
                                 name="serviceId"
                                 label="Loại dịch vụ"
                                 rules={[{ required: true, message: 'Please select a category!' }]}
@@ -687,7 +686,8 @@ const addGymPackage = async (gymPackageData) => {
                                         </Option>
                                     ))}
                                 </Select>
-                            </Form.Item> */}
+                            </Form.Item>
+                            
                         </>
                     )}
                     {selectedMenuKey === 'sub2-2' && (
@@ -718,13 +718,23 @@ const addGymPackage = async (gymPackageData) => {
                                 </Upload>
 
                             </Form.Item>
+                            <Form.Item
+                                name="layout"
+                                label="Kiểu hiển thị"
+                                rules={[{ required: true, message: 'Please select a layout!' }]}
+                            >
+                                <Select placeholder="Chọn kiểu hiển thị">
+                                    <Option value="image-left">Hình bên trái</Option>
+                                    <Option value="image-right">Hình bên phải</Option>
+                                </Select>
+                            </Form.Item>
                         </>
 
 
                     )}
                 </Form>
             </Modal>
-          
+
 
 
             <ToastContainer

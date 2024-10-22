@@ -5,7 +5,6 @@ import Home from './Page/Home.js';
 import Service from './Page/Service.js';
 //import Home from './component/Home/Home.js';
 import HeroSection from './component/HeroSection/HeroSection.js';
-import './component/Home/Home.css'; // Import component Home
 import Login from './component/Login/Login.js';
 import Register from './component/Register/Register.js';
 import Header from './component/Header/Header.js';

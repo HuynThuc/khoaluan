@@ -38,7 +38,7 @@ const ExploreSection = () => {
             key={index} 
             className="bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition duration-300"
           >
-              <span className="text-3xl text-blue-500 mb-4 inline-block">
+              <span className="text-3xl text-[#f36100] mb-4 inline-block">
               <i className={item.icon}></i>
             </span>
             <h4 className="mb-2 text-xl font-semibold text-white">{item.title}</h4>

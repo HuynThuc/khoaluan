@@ -20,7 +20,7 @@ const JoinSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {joinData.map((item, index) => (
               <div key={index} className="flex items-start gap-4">
-                <span className="text-3xl text-blue-500"><i className={item.icon}></i></span>
+                <span className="text-3xl text-[#f36100]"><i className={item.icon}></i></span>
                 <div>
                   <h4 className="text-xl font-semibold mb-2">{item.title}</h4>
                   <p className="text-gray-300">{item.description}</p>
