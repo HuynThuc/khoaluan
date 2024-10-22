@@ -1,7 +1,7 @@
-// src/entities/service.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UserGymPackage } from './user_gymPackage.entity';
- // Import GymPackage
+import { GymPackage } from './gymPackage.entity';
+import { Trainer } from './trainer.entity'; // Import Trainer
 
 @Entity('service')
 export class Service {
@@ -16,6 +16,9 @@ export class Service {
 
     @Column({ type: 'text', nullable: true })
     content?: string;
+    
+    @Column({ type: 'varchar', length: 50, nullable: true }) // Thêm cột layout
+    layout?: string; // Kiểu layout cho gói tập
 
     @Column({ type: 'varchar', nullable: true })
     image?: string;
@@ -23,4 +26,9 @@ export class Service {
     @OneToMany(() => UserGymPackage, userGymPackage => userGymPackage.service)
     users!: UserGymPackage[];
 
+    @OneToMany(() => GymPackage, gymPackage => gymPackage.service) // Thêm quan hệ với GymPackage
+    gymPackages!: GymPackage[];
+
+    @OneToMany(() => Trainer, trainer => trainer.service) // Thêm quan hệ với Trainer
+    trainers!: Trainer[];
 }

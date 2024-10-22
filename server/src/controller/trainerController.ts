@@ -59,6 +59,17 @@ router.get('/getTrainer/:id', async (req: Request, res: Response) => {
     }
 });
 
+// Lấy gói tập theo ID
+router.get('/getTrainerByService/:serviceId', async (req, res) => {
+    const { serviceId } = req.params;
+    try {
+        const trainers = await trainerService.getByServiceId(Number(serviceId));
+        res.json(trainers);
+    } catch (error) {
+     
+    }
+});
+
 
 // Xóa huấn luyện viên theo ID
 router.delete('/deleteTrainer/:id', async (req: Request, res: Response) => {

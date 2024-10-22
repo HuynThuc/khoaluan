@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { OrderDetail } from './order_detail.entity'; // Liên kết với OrderDetail
+import { Service } from './service.entity'; // Import Service
 
 @Entity('trainer') // Tên bảng trong cơ sở dữ liệu
 export class Trainer {
@@ -20,6 +21,9 @@ export class Trainer {
 
     @Column({ type: 'varchar', length: 255, nullable: true })
     image?: string; // Đường dẫn đến ảnh đại diện
+
+    @ManyToOne(() => Service, service => service.trainers) // Thêm quan hệ với Service
+    service!: Service;
 
     @OneToMany(() => OrderDetail, orderDetail => orderDetail.trainer)
     orderDetails!: OrderDetail[]; // Quan hệ với bảng OrderDetail

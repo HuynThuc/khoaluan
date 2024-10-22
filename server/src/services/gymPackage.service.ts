@@ -1,19 +1,19 @@
 import { AppDataSource } from '../database/db';
 import { GymPackage } from '../entities/gymPackage.entity'; // Import GymPackage entity
-
+import { Service } from '../entities/service.entity';
 import { Repository } from 'typeorm';
 import { GymPackageDTO } from '../dto/gymPackage.dto'; // Tạo DTO cho GymPackage nếu cần
 
 export class GymPackageService {
     private gymPackageRepository = AppDataSource.getRepository(GymPackage);
-   
+    private serviceRepository = AppDataSource.getRepository(Service);
 
     constructor(
-        gymPackageRepository: Repository<GymPackage> = AppDataSource.getRepository(GymPackage), // Khởi tạo với repository mặc định
-       
+        gymPackageRepository: Repository<GymPackage> = AppDataSource.getRepository(GymPackage),
+        serviceRepository: Repository<Service> = AppDataSource.getRepository(Service)
     ) {
-        this.gymPackageRepository = gymPackageRepository; // Gán repository vào biến instance
-       
+        this.gymPackageRepository = gymPackageRepository;
+        this.serviceRepository = serviceRepository;
     }
 
     // Lấy tất cả gói tập
@@ -29,19 +29,33 @@ export class GymPackageService {
         });
     }
 
+    async getByServiceId(serviceId: number): Promise<GymPackage[]> {
+        return await this.gymPackageRepository.find({
+            where: { service: { id: serviceId } },  // Lọc theo serviceId
+            relations: ['service'] // Lấy thông tin service
+        });
+    }
+
    
   
 
     // Tạo mới gói tập
-    async create(gymPackageData: GymPackageDTO): Promise<GymPackage> {
-        // Kiểm tra xem dịch vụ có tồn tại không
-        // Tạo gói tập mới với dịch vụ
-        const gymPackage = this.gymPackageRepository.create({
-            ...gymPackageData,
-        });
+  // Tạo mới gói tập
+  async create(gymPackageData: GymPackageDTO): Promise<GymPackage> {
+    const service = await this.serviceRepository.findOne({
+        where: { id: gymPackageData.serviceId },
+    });
 
-        // Lưu gói tập vào cơ sở dữ liệu
-        return await this.gymPackageRepository.save(gymPackage);
+    if (!service) {
+        throw new Error('Service not found');
     }
+
+    const gymPackage = this.gymPackageRepository.create({
+        ...gymPackageData,
+        service,
+    });
+
+    return await this.gymPackageRepository.save(gymPackage);
+} 
 
 }

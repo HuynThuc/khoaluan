@@ -7,7 +7,7 @@ export const AppDataSource = new DataSource({
     port: 3306,
     username: 'root',
     password: '',
-    database: 'khoaluan',
+    database: 'khoaluan1',
     entities: [__dirname + '/../entities/**/*.entity{.ts,.js}'], // Tìm tất cả các entity trong thư mục entities
     synchronize: true,
 });

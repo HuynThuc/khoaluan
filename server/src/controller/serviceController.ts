@@ -50,9 +50,9 @@ router.post('/addService', upload.single('image'), async (req: Request, res: Res
 router.get('/getService/:id', async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
-        const gymPackage = await serviceService.getById(id);
-        if (gymPackage) {
-            res.status(200).json(gymPackage);
+        const service = await serviceService.getById(id);
+        if (service) {
+            res.status(200).json(service);
         } else {
             res.status(404).json({ message: 'Gym package not found' });
         }

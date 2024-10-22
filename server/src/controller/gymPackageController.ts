@@ -25,22 +25,19 @@ router.get('/getAllPackage', async (req: Request, res: Response) => {
 
 
 
-// // Lấy gói tập theo ID
-// router.get('/:id', async (req: Request, res: Response) => {
-//     const { id } = req.params;
-//     try {
-//         const gymPackage = await gymPackageService.getById(Number(id));
-//         if (!gymPackage) {
-//             return res.status(404).json({ message: 'Gói tập không tìm thấy' });
-//         }
-//         return res.json(gymPackage);
-//     } catch (error) {
-//         console.error('Lỗi khi lấy gói tập:', error);
-//         return res.status(500).json({ message: 'Lỗi khi lấy gói tập', error });
-//     }
-// });
+// Lấy gói tập theo ID
+router.get('/getGymPackagesByService/:serviceId', async (req, res) => {
+    const { serviceId } = req.params;
+    try {
+        const gymPackages = await gymPackageService.getByServiceId(Number(serviceId));
+        res.json(gymPackages);
+    } catch (error) {
+     
+    }
+});
 
-// Tạo gói tập mới
+
+
 // Tạo gói tập mới
 router.post('/addGymPackage', async (req: Request, res: Response) => {
     console.log('Request Body:', req.body);

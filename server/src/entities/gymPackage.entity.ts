@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { OrderDetail } from './order_detail.entity'; // Liên kết với OrderDetail
+import { Service } from './service.entity';
 
 @Entity('gym_package') // Tên bảng trong cơ sở dữ liệu
 export class GymPackage {
@@ -15,6 +16,12 @@ export class GymPackage {
     @Column({ type: 'decimal', precision: 10, scale: 2 })
     price!: number; // Giá của gói tập
 
+  
+
     @OneToMany(() => OrderDetail, orderDetail => orderDetail.gymPackage)
     orderDetails!: OrderDetail[]; // Quan hệ với bảng OrderDetail
+
+    @ManyToOne(() => Service, service => service.gymPackages) // Liên kết với Service
+    @JoinColumn({ name: 'service_id' }) // Cột liên kết với bảng Service
+    service!: Service; // Dịch vụ tương ứng
 }

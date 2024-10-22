@@ -3,5 +3,6 @@ export interface TrainerDTO {
     gender: string; // Giới tính của huấn luyện viên
     experience_years: number; // Số năm kinh nghiệm
     bio?: string; // Thông tin mô tả ngắn về huấn luyện viên
-    image?: string; // Đường dẫn đến ảnh đại diện
+    image?: string;
+    serviceId: number;  // Đường dẫn đến ảnh đại diện
 }
