@@ -14,6 +14,7 @@ import Footer from './component/Footer/Footer.js';
 import ServiceDetail from './Page/ServiceDetail.js';
 import DashboardPage from './Admin/DashboardPage.jsx';
 import Checkout from './Page/Checkout.js'
+import WeeklySchedule from './component/WeeklySchedule/WeeklySchedule.js';
 
 const Layout = () => {
   const location = useLocation();
@@ -40,6 +41,7 @@ function App() {
             <Route path="/servicedetail/:id" element={<ServiceDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/payment" element={<Checkout />} />
+            <Route path="/weeklyschedule" element={<WeeklySchedule />} />
             <Route path="/register" element={<Register />} />
             {/* Thêm các route khác nếu cần */}
           </Route>

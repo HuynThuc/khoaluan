@@ -21,4 +21,20 @@ router.post('/addTrainerSchedule', async (req: Request, res: Response) => {
     }
 });
 
+
+// Lấy lịch trình theo ID huấn luyện viên
+router.get('/getschedulesbyTrainer/:trainerId', async (req: Request, res: Response) => {
+    try {
+        const { trainerId } = req.params; // Lấy trainerId từ params
+        const schedules = await trainerscheduleService.getSchedulesByTrainerId(Number(trainerId)); // Gọi service để lấy lịch trình theo trainerId
+        res.status(200).json(schedules); // Trả về danh sách lịch trình của huấn luyện viên
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: 'An unknown error occurred' });
+        }
+    }
+});
+
 export default router;

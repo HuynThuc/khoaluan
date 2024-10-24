@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { LaptopOutlined, NotificationOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
+import { LaptopOutlined, NotificationOutlined, UserOutlined,TeamOutlined, LineChartOutlined,PlusOutlined } from '@ant-design/icons';
 import { EditOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import { Avatar, Breadcrumb, Layout, Menu, Typography, theme, Table, Modal, Form, Input, Button, Select, Upload, message } from 'antd';
 import ReactQuill from 'react-quill';
@@ -23,13 +23,12 @@ const items2 = [
     {
         key: 'sub1',
         icon: <UserOutlined />,
-        label: 'Người Dùng',
-
+        label: 'Quản lý Thành Viên', // Đặt mục quản lý thành viên ở đây
     },
     {
         key: 'sub2',
         icon: <LaptopOutlined />,
-        label: 'Gói tập và Dịch vụ',
+        label: 'Quản lý Gói Tập và Dịch Vụ',
         children: [
             { key: 'sub2-1', label: 'Quản lý gói tập' },
             { key: 'sub2-2', label: 'Dịch vụ' },
@@ -38,11 +37,23 @@ const items2 = [
     {
         key: 'sub3',
         icon: <NotificationOutlined />,
-        label: 'Đơn Hàng',
-
+        label: 'Quản lý Đơn Hàng', // Đặt mục quản lý đơn hàng ở đây
     },
-
+    {
+        key: 'sub4',
+        icon: <LineChartOutlined />, // Có thể dùng biểu tượng khác nếu cần
+        label: 'Quản lý Thống Kê', // Thêm mục quản lý thống kê
+    },
+    {
+        key: 'sub5',
+        icon: <TeamOutlined />, // Biểu tượng cho quản lý huấn luyện viên
+        label: 'Quản lý Huấn Luyện Viên',
+        children: [
+            { key: 'sub5-1', label: 'Thời gian rảnh của HLV' }, // Thêm mục cho thời gian rảnh
+        ],
+    },
 ];
+
 
 // Sample data and columns for each subnav item
 

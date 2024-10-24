@@ -8,9 +8,7 @@ import MembershipTable from "../component/MemberShiptable/member";
 import RegistrationForm from "../component/RegisterForm/RegisterForm";
 import BMICalculator from "../component/BMI/Bmi";
 import ServicesSection from "../component/ServiceHome/ServiceHome";
-import Calendar from "../component/Calendar/Calendar";
-import ServiceCard from "../component/ServiceCard/ServiceCard";
-import WeeklySchedule from "../component/WeeklySchedule/WeeklySchedule";
+
 
 
 function Home() {
@@ -20,14 +18,14 @@ function Home() {
         
        <HeroSection/>
        <ExploreSection/>
+       <ServicesSection/>
        <ClassSection/>
        <JoinSection/>
        <PricingSection/>
-       <BMICalculator/>
        <RegistrationForm/>
-       <ServicesSection/>
-       <Calendar/>
-       <WeeklySchedule/>
+       <BMICalculator/>
+     
+      
       
      
     

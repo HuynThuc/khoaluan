@@ -6,6 +6,7 @@ import serviceRoutes from './controller/serviceController';
 import gymPackageRoutes from './controller/gymPackageController';
 import trainerRoutes from './controller/trainerController';
 import orderRoutes from './controller/orderController'
+import ScheduleRoutes from './controller/trainerScheduleController'
 
 import multer from 'multer';
 import { multerConfig } from './config/multer.config';
@@ -25,6 +26,8 @@ const startServer = () => {
     app.use('/gymPackage', gymPackageRoutes)
     app.use('/trainer', trainerRoutes)
     app.use('/order', orderRoutes)
+    app.use('/schedule', ScheduleRoutes)
+
 
     // Sử dụng multer cho tất cả các route trong gymPackageRoutes
     app.use('/service', upload.single('image'), serviceRoutes);

@@ -37,4 +37,12 @@ export class TrainerScheduleService {
     async getAllSchedules(): Promise<TrainerSchedule[]> {
         return await this.trainerScheduleRepository.find();
     }
+
+     // Lấy lịch trình theo ID của huấn luyện viên
+     async getSchedulesByTrainerId(trainerId: number): Promise<TrainerSchedule[]> {
+        return await this.trainerScheduleRepository.find({
+            where: { trainer: { id: trainerId } }, // Tìm kiếm theo ID huấn luyện viên
+            relations: ['trainer'], // Đảm bảo load quan hệ với trainer
+        });
+    }
 }

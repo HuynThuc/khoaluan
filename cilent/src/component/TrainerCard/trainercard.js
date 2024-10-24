@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function TrainerCard() {
   const [trainers, setTrainers] = useState([]);
   const location = useLocation();
   const { serviceId } = location.state; // Lấy serviceId từ state
+  const navigate = useNavigate(); // Sử dụng để điều hướng
 
   useEffect(() => {
       const fetchTrainersByService = async () => {
@@ -19,6 +20,11 @@ export default function TrainerCard() {
 
       fetchTrainersByService();
   }, [serviceId]);
+
+  // Hàm điều hướng tới trang WeeklySchedule
+  const handleSelectTrainer = (trainerId) => {
+      navigate('/weeklyschedule', { state: { trainerId } });
+  };
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -47,12 +53,13 @@ export default function TrainerCard() {
                   <p>Kinh nghiệm: {trainer.experience_years} năm</p>
                 </div>
                 <div className="text-center my-3">
-                  <a
-                    className="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium"
-                    href="#"
+                  {/* Nút chọn điều hướng tới WeeklySchedule */}
+                  <button
+                    className="text-xs bg-indigo-500 text-white py-2 px-4 rounded-full hover:bg-indigo-600 focus:outline-none"
+                    onClick={() => handleSelectTrainer(trainer.id)}
                   >
-                    Xem hồ sơ
-                  </a>
+                    Chọn
+                  </button>
                 </div>
               </div>
             </div>

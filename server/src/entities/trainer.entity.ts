@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { OrderDetail } from './order_detail.entity'; // Liên kết với OrderDetail
 import { Service } from './service.entity'; // Import Service
+import { TrainerSchedule } from './trainerSchedule.entity';
+import { scheduler } from 'timers/promises';
 
 @Entity('trainer') // Tên bảng trong cơ sở dữ liệu
 export class Trainer {
@@ -27,4 +29,7 @@ export class Trainer {
 
     @OneToMany(() => OrderDetail, orderDetail => orderDetail.trainer)
     orderDetails!: OrderDetail[]; // Quan hệ với bảng OrderDetail
+
+    @OneToMany(() => TrainerSchedule, schedule => schedule.trainer)
+    schedules!: TrainerSchedule[];
 }
