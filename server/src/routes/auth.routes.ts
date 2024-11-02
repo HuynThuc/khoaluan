@@ -13,4 +13,6 @@ router.post('/login', authController.login);
 // Làm mới token
 router.post('/refresh-token', authController.refreshToken);
 
+router.get('/getAllUser', authController.getAllUsers)
+
 export default router;

@@ -1,61 +1,46 @@
-import React from 'react';
-
-const BookingHeader = () => {
+const BookingHeader = ({ currentStep, serviceSubtitle, selectedTrainer, selectedTimes }) => {
   const steps = [
     { 
-      title: 'Service', 
-      isActive: true,
-      isCompleted: true,
-      subtitle: 'Free introduction training'
+      title: 'DỊCH VỤ', 
+      isActive: currentStep === 0,
+      isCompleted: currentStep > 0,
+      subtitle: serviceSubtitle || ''
     },
     { 
-      title: 'Provider', 
-      isActive: false,
-      isCompleted: false,
-      subtitle: ''
+      title: 'HUẤN LUYỆN VIÊN', 
+      isActive: currentStep === 1,
+      isCompleted: currentStep > 1,
+      subtitle: selectedTrainer || '' // Hiển thị tên huấn luyện viên đã chọn
     },
     { 
-      title: 'Time', 
-      isActive: false,
-      isCompleted: false,
-      subtitle: ''
+      title: 'THỜI GIAN', 
+      isActive: currentStep === 2,
+      isCompleted: currentStep > 2,
+      subtitle: selectedTimes || '' // Will display selected times here
     },
     { 
-      title: 'Client', 
-      isActive: false,
-      isCompleted: false,
+      title: 'THANH TOÁN', 
+      isActive: currentStep === 3,
+      isCompleted: currentStep > 3,
       subtitle: ''
     }
   ];
 
   return (
-    <nav className="w-full border-b border-gray-200">
+    <nav className="w-full border-b border-gray-200 shadow-lg"> {/* Thêm shadow ở đây */}
       <div className="container mx-auto">
         <div className="relative">
           <ul className="flex items-center">
             {steps.map((step, index) => (
               <li 
                 key={step.title}
-                className={`relative flex-1 text-center ${
-                  index < steps.length - 1 
-                    ? 'border-r border-gray-200' 
-                    : ''
-                }`}
+                className={`relative flex-1 text-center ${index < steps.length - 1 ? 'border-r border-gray-200' : ''}`}
               >
                 <a 
-                  href="#" 
-                  className={`relative block py-4 px-4 ${
-                    step.isActive 
-                      ? 'bg-white' 
-                      : 'hover:bg-gray-50'
-                  }`}
+                  className={`relative block py-4 px-4 ${step.isActive ? 'bg-white' : 'hover:bg-gray-50'}`}
                 >
                   <div className="relative">
-                    <div className={`text-sm ${
-                      step.isActive || step.isCompleted
-                        ? 'text-blue-600' 
-                        : 'text-gray-600'
-                    }`}>
+                    <div className={`text-sm ${step.isActive || step.isCompleted ? 'text-blue-600' : 'text-gray-600'}`}>
                       {step.title}
                       {step.isCompleted && (
                         <span className="ml-2 text-green-500">✓</span>

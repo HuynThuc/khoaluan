@@ -10,7 +10,7 @@ export class Trainer {
     id!: number;
 
     @Column({ type: 'varchar', length: 255 })
-    name!: string; // Tên của huấn luyện viên
+    trainerName!: string; // Tên của huấn luyện viên
 
     @Column({ type: 'varchar', length: 255 })
     gender!: string; // Giới tính của huấn luyện viên

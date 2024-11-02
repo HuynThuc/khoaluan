@@ -18,7 +18,9 @@ export class GymPackageService {
 
     // Lấy tất cả gói tập
     async getAll(): Promise<GymPackage[]> {
-        return await this.gymPackageRepository.find(); // Lấy gói tập và quan hệ với service
+        return await this.gymPackageRepository.find({
+            relations:['service']
+        }); // Lấy gói tập và quan hệ với service
     }
 
     // Lấy gói tập theo ID
@@ -40,22 +42,27 @@ export class GymPackageService {
   
 
     // Tạo mới gói tập
-  // Tạo mới gói tập
-  async create(gymPackageData: GymPackageDTO): Promise<GymPackage> {
-    const service = await this.serviceRepository.findOne({
-        where: { id: gymPackageData.serviceId },
-    });
+// Tạo mới gói tập
+async create(gymPackageData: GymPackageDTO): Promise<GymPackage> {
+    let service = null; // Khởi tạo service là null
 
-    if (!service) {
-        throw new Error('Service not found');
+    if (gymPackageData.serviceId) { // Kiểm tra xem serviceId có phải là undefined hay không
+        service = await this.serviceRepository.findOne({
+            where: { id: gymPackageData.serviceId },
+        });
+
+        if (!service) {
+            throw new Error('Service not found');
+        }
     }
 
     const gymPackage = this.gymPackageRepository.create({
         ...gymPackageData,
-        service,
+        service, // Nếu không có service thì sẽ là null
     });
 
     return await this.gymPackageRepository.save(gymPackage);
-} 
+}
+
 
 }

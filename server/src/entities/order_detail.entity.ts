@@ -8,28 +8,42 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { Order } from './order.entity';
-import { Trainer } from './trainer.entity'; // Liên kết đến Trainer
-import { GymPackage } from './gymPackage.entity'; // Liên kết đến GymPackage
+import { Trainer } from './trainer.entity';
+import { GymPackage } from './gymPackage.entity';
+import { Promotion } from './promotion.entity';
 
-@Entity('order_details') // Tên bảng trong cơ sở dữ liệu
+@Entity('order_details')
 export class OrderDetail {
     @PrimaryGeneratedColumn()
     id!: number;
 
     @ManyToOne(() => Order, order => order.orderDetails)
-    @JoinColumn({ name: 'order_id' }) // Cột order_id trong bảng order_details
+    @JoinColumn({ name: 'order_id' })
     order!: Order;
 
     @ManyToOne(() => Trainer, trainer => trainer.orderDetails, { nullable: true })
-    @JoinColumn({ name: 'trainer_id' }) // Cột trainer_id trong bảng order_details
-    trainer?: Trainer; // Liên kết đến Trainer, có thể null nếu không cần
+    @JoinColumn({ name: 'trainer_id' })
+    trainer?: Trainer;
 
     @ManyToOne(() => GymPackage, gymPackage => gymPackage.orderDetails)
-    @JoinColumn({ name: 'package_id' }) // Cột package_id trong bảng order_details
-    gymPackage!: GymPackage; // Liên kết đến GymPackage
+    @JoinColumn({ name: 'package_id' })
+    gymPackage!: GymPackage;
 
     @Column({ type: 'decimal', precision: 10, scale: 2 })
-    price!: number; // Giá cho mỗi gói tập
+    price!: number;
+
+    @Column({ type: 'date' })
+    sessionDate!: Date;
+
+    @Column({ type: 'time' })
+    sessionTime!: string;
+
+    @ManyToOne(() => Promotion, { nullable: true })
+    @JoinColumn({ name: 'promotion_id' })
+    promotion?: Promotion;
+
+    @Column({ type: 'varchar', length: 50, default: 'pending' }) // Thêm cột status
+    status!: string; // Các giá trị có thể là 'pending', 'completed', 'canceled'
 
     @CreateDateColumn({ type: 'timestamp' })
     createdAt!: Date;

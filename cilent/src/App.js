@@ -9,17 +9,22 @@ import Login from './component/Login/Login.js';
 import Register from './component/Register/Register.js';
 import Header from './component/Header/Header.js';
 import VideoPlayer from './component/video/video.js';
-import { AuthProvider } from './Context/AuthContext'; // Import AuthProvider
+import { AuthProvider } from './Context/AuthContext';
+import ProtectedRoute from './Context/ProtectedRoute.js'; // Import AuthProvider
 import Footer from './component/Footer/Footer.js';
 import ServiceDetail from './Page/ServiceDetail.js';
+import Booking from './Page/Booking.js';
 import DashboardPage from './Admin/DashboardPage.jsx';
 import Checkout from './Page/Checkout.js'
 import BookingConfirmation from './component/Payment/Payment.js';
+import ThanhToan from './Page/ThanhToan.js';
 import WeeklySchedule from './component/WeeklySchedule/WeeklySchedule.js';
+import ThankYouComponent from './component/Thank/thank.js';
+import Profile from './component/Profile/profile.js';
 
 const Layout = () => {
   const location = useLocation();
-  const showHeaderFooter = !['/login', '/register',  '/admin-2',].includes(location.pathname);
+  const showHeaderFooter = !['/login', '/register',  '/admin-2', '/thank',].includes(location.pathname);
 
   return (
     <>
@@ -32,20 +37,21 @@ const Layout = () => {
 
 function App() {
   return (
-    <AuthProvider> {/* Bọc App bằng AuthProvider */}
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="/admin-2" element={<DashboardPage/>} />
+            <Route path="/admin-2" element={<ProtectedRoute requiredRole={1}><DashboardPage /></ProtectedRoute>} /> {/* Bảo vệ route */}
             <Route path="/service" element={<Service />} />
             <Route path="/servicedetail/:id" element={<ServiceDetail />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/payment" element={<Checkout />} />
-            <Route path="/payment1" element={<BookingConfirmation />} />
-            <Route path="/weeklyschedule" element={<WeeklySchedule />} />
+            <Route path="/booking" element={<Checkout />} />
+            <Route path="/thanhtoan" element={<ThanhToan />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/time" element={<Booking />} />
             <Route path="/register" element={<Register />} />
-            {/* Thêm các route khác nếu cần */}
+            <Route path="/thank" element={<ThankYouComponent />} />
           </Route>
         </Routes>
       </Router>

@@ -53,6 +53,37 @@ export class TrainerService {
         });
     }
 
+    // src/service/trainer.service.ts
+
+async update(id: number, trainerData: TrainerDTO, imageFile?: Express.Multer.File): Promise<Trainer | null> {
+    const trainer = await this.trainerRepository.findOne({ where: { id } });
+    
+    if (!trainer) {
+        throw new Error('Trainer not found');
+    }
+    
+    const service = await this.serviceRepository.findOne({ where: { id: trainerData.serviceId } });
+    if (!service) {
+        throw new Error('Service not found');
+    }
+
+    this.trainerRepository.merge(trainer, {
+        ...trainerData,
+        service,
+        image: imageFile ? imageFile.filename : trainer.image // Giữ ảnh cũ nếu không có ảnh mới
+    });
+
+    // // Cập nhật thông tin huấn luyện viên
+    // trainerData; // Cập nhật tên hoặc các trường khác
+    // trainer.service = service;
+    // trainer.image = imageFile ? imageFile.filename : trainer.image; // Giữ lại hình ảnh cũ nếu không có hình mới
+
+    return await this.trainerRepository.save(trainer);
+}
+
+
+
+   
     // Xóa huấn luyện viên theo ID
     async delete(id: number): Promise<void> {
         await this.trainerRepository.delete(id); // Xóa huấn luyện viên

@@ -11,10 +11,9 @@ const ServiceDetailFeature = ({ content }) => {
       <div className="container mx-auto">
         <div className="container mx-auto py-8 px-60 bg-white text-black">
           <h2 className="text-3xl font-semibold mb-4 text-center">Mô tả dịch vụ</h2>
-          <p className="text-lg leading-relaxed">
-            {content ? parse(content) : "Đang tải..."} {/* Hiển thị mô tả hoặc thông báo đang tải */}
-          </p>
-
+          <div className="text-lg leading-relaxed">
+            {content ? parse(content) : "Đang tải..."}
+          </div>
         </div>
         <div className="text-center mb-12 text-black">
           <h3 className="text-3xl font-semibold pb-3">Lợi ích khóa học
@@ -58,13 +57,7 @@ const ServiceDetailFeature = ({ content }) => {
             </div>
             <div className="title text-xl font-semibold mb-2 text-black">Tốt cho tim mạch</div>
           </div>
-
-
-
-
         </div>
-
-
       </div>
     </section>
   );

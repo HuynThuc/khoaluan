@@ -54,9 +54,27 @@ const refreshToken = async (req: Request, res: Response) => {
         }
     }
 };
+// Lấy tất cả người dùng
+const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await authService.getAllUsers(); // Gọi phương thức getAllUsers từ instance
+        res.json({
+            Status: 'Success',
+            users
+        });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: 'An unknown error occurred' });
+        }
+    }
+};
+
 
 export default {
     register,
     login,
     refreshToken,
+    getAllUsers,
 };

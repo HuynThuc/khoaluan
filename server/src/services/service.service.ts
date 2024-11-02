@@ -28,4 +28,31 @@ export class ServiceService {
         });
         return await this.serviceRepository.save(service);
     }
+
+    // Cập nhật gói dịch vụ theo ID
+    async update(id: number, serviceData: ServiceDTO, imageFile?: Express.Multer.File): Promise<Service | null> {
+        const service = await this.serviceRepository.findOne({ where: { id } });
+
+        if (!service) {
+            return null; // Trả về null nếu không tìm thấy gói dịch vụ
+        }
+
+        // Cập nhật thông tin gói dịch vụ
+        this.serviceRepository.merge(service, {
+            ...serviceData,
+            image: imageFile ? imageFile.filename : service.image // Giữ ảnh cũ nếu không có ảnh mới
+        });
+
+        return await this.serviceRepository.save(service);
+    }
+
+    // Xóa gói dịch vụ theo ID
+    async delete(id: number): Promise<boolean> {
+        const result = await this.serviceRepository.delete(id);
+
+        // Kiểm tra xem xóa thành công hay không
+        return result.affected !== 0;
+    }
+
+
 }

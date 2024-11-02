@@ -11,9 +11,10 @@ import {
 } from 'typeorm';
 import { Role } from './role.entity';
 import { UserGymPackage } from './user_gymPackage.entity';
-import { Order } from './order.entity'; // Liên kết đến bảng Order
+import { Order } from './order.entity';
+import { UserPromotion } from './user_promotions.entity';
 
-@Entity('users') // 'users' là tên bảng trong cơ sở dữ liệu
+@Entity('users')
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
@@ -36,14 +37,16 @@ export class User extends BaseEntity {
     @UpdateDateColumn({ type: 'timestamp' })
     updatedAt!: Date;
 
-    // Thêm quan hệ với bảng Role
     @ManyToOne(() => Role, role => role.id)
-    @JoinColumn({ name: 'role_id' }) // Cột role_id trong bảng users
+    @JoinColumn({ name: 'role_id' })
     role!: Role;
 
     @OneToMany(() => UserGymPackage, userGymPackage => userGymPackage.user)
     gymPackages!: UserGymPackage[];
 
     @OneToMany(() => Order, order => order.user)
-    orders!: Order[]; // Quan hệ với bảng Order
+    orders!: Order[];
+
+    @OneToMany(() => UserPromotion, userPromotion => userPromotion.user)
+    userPromotions!: UserPromotion[]; // Quan hệ với bảng UserPromotion
 }

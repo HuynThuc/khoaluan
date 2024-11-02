@@ -47,27 +47,31 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
-    // Hàm login
     const login = async (email, password) => {
         try {
             const response = await axios.post('http://localhost:3002/auth/login', { email, password });
-            const { access_token, refresh_token } = response.data;
-            setTokens(access_token, refresh_token);
-
-            const user = decodeToken(access_token);
-            setUser(user);
+            if (response.data.access_token && response.data.refresh_token) {
+                const { access_token, refresh_token } = response.data;
+                setTokens(access_token, refresh_token);
+    
+                const user = decodeToken(access_token);
+                setUser(user);
+            } else {
+                throw new Error('Login failed: no tokens returned');
+            }
         } catch (error) {
             console.error('Login error:', error);
-            throw new Error('Login failed');
+            throw new Error('Login failed: ' + error.message); // Ghi lại thông báo lỗi
         }
     };
+    
 
     // Hàm refresh token
     const refreshToken = async () => {
         const refresh_token = fetchRefreshToken();
         if (refresh_token) {
             try {
-                const response = await axios.post('/api/auth/refresh-token', { refresh_token });
+                const response = await axios.post('http://localhost:3002/auth/refresh-token', { refresh_token });
                 const { access_token, refresh_token: newRefreshToken } = response.data;
                 setTokens(access_token, newRefreshToken);
 
