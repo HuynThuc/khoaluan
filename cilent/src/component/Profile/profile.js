@@ -22,17 +22,20 @@ const GymProfile = () => {
                     }
                     const data = await response.json();
                     setOrderDetails(data.orderDetails || []);
-
+    
                     // Tính toán dữ liệu stats từ orderDetails
                     const totalSessions = data.orderDetails.length;
                     const completedSessions = data.orderDetails.filter(order => order.status === 'completed').length;
-                    const remainingSessions = totalSessions - completedSessions;
+                    const canceledSessions = data.orderDetails.filter(order => order.status === 'canceled').length;
+    
+                    // Số buổi còn lại bao gồm cả buổi bị hủy
+                    const remainingSessions = totalSessions - completedSessions - canceledSessions;
                     const totalHours = completedSessions * 1; // Giả sử mỗi buổi tập là 1 giờ, bạn có thể điều chỉnh logic này.
-
+    
                     const completionRate = totalSessions > 0
                         ? `${Math.round((completedSessions / totalSessions) * 100)}%`
                         : '0%';
-
+    
                     // Cập nhật giá trị stats
                     setStats([
                         { value: remainingSessions.toString(), label: "Buổi tập còn lại" },
@@ -40,7 +43,7 @@ const GymProfile = () => {
                         { value: completionRate, label: "Tỷ lệ hoàn thành" },
                         { value: totalHours.toString(), label: "Giờ tập" }
                     ]);
-
+    
                 } catch (error) {
                     console.error("Error fetching order details:", error);
                 }
@@ -48,6 +51,7 @@ const GymProfile = () => {
         };
         fetchOrder();
     }, [user]);
+    
 
     console.log('Order details:', orderDetails);
 

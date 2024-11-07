@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import jsQR from 'jsqr';
+import axios from 'axios'; // Sử dụng axios để gọi API
 
-const QRCodeScanner = () => {
+const QRCodeScanner = ({ onScan }) => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [scanning, setScanning] = useState(false);
     const [result, setResult] = useState('');
+    const [responseMessage, setResponseMessage] = useState('');
 
     const startCamera = async () => {
         try {
@@ -32,11 +34,28 @@ const QRCodeScanner = () => {
 
             if (code) {
                 setResult(code.data);
-                setScanning(false); // Dừng quét khi đã tìm thấy mã
+                setScanning(false);
+
+                // Gọi callback onScan nếu được truyền từ ngoài
+                if (onScan) {
+                    onScan(code.data);
+                }
+
+                sendQRCodeDataToAPI(code.data);
                 return;
             }
         }
         requestAnimationFrame(scanQRCode);
+    };
+
+    const sendQRCodeDataToAPI = async (qrData) => {
+        try {
+            const response = await axios.post('http://localhost:3002/order/checkQRCode', { qrData });
+            setResponseMessage(response.data.message);
+        } catch (error) {
+            console.error('Error sending QR data to API:', error);
+            setResponseMessage('Có lỗi xảy ra khi kiểm tra mã QR');
+        }
     };
 
     const handleStartScan = () => {
@@ -53,6 +72,7 @@ const QRCodeScanner = () => {
             <video ref={videoRef} style={{ width: '100%', maxWidth: '400px' }} />
             <canvas ref={canvasRef} style={{ display: 'none' }} />
             {result && <div>Kết quả: {result}</div>}
+            {responseMessage && <div>{responseMessage}</div>}
         </div>
     );
 };

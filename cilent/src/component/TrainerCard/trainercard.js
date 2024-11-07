@@ -22,7 +22,7 @@ export default function TrainerCard({ trainers, onSelectTrainer }) {
               </div>
               <div className="p-2">
                 <h3 className="text-center text-xl text-gray-900 font-medium leading-8 p-3">
-                  Tên HLV: {trainer.trainerName}
+                  HLV: {trainer.trainerName}
                 </h3>
                 <div className="text-center text-gray-400 text-xs font-semibold">
                   <p>Chuyên môn: {parse(trainer.bio)}</p>

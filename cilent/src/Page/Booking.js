@@ -3,7 +3,8 @@ import { useLocation } from 'react-router-dom';
 import BookingHeader from "../component/BookingStep/BookingHeader";
 import BannerService from "../component/Banner/bannerService";
 import WeeklySchedule from "../component/WeeklySchedule/WeeklySchedule";
-const bookingImage = '/images/booking.jpg';
+
+const bookingImage = '/images/anh-mo-ta.png'; // Hình ảnh mặc định cho trang đặt chỗ
 
 function Booking() {
 

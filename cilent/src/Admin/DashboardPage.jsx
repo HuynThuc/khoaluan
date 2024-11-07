@@ -11,6 +11,8 @@ import 'react-quill/dist/quill.snow.css';
 import CustomQuillEditor from './CustomReactQuill';
 import { duration } from 'moment';
 import RevenueChart from './RevenueChart';
+import QR from './QR';
+import QRCodeScanner from './QR';
 
 
 
@@ -27,6 +29,11 @@ const items2 = [
         key: 'sub4',
         icon: <LineChartOutlined />, // Có thể dùng biểu tượng khác nếu cần
         label: 'Quản lý Thống Kê', // Thêm mục quản lý thống kê
+    },
+    {
+        key: 'sub7',
+        icon: <LineChartOutlined />, // Có thể dùng biểu tượng khác nếu cần
+        label: 'Quét mã', // Thêm mục quản lý thống kê
     },
     {
         key: 'sub1',
@@ -1090,8 +1097,12 @@ const DashboardPage = () => {
                                 )}
                             </div>
                         </div>
-                       
-                        {selectedMenuKey === 'sub4' ? (
+                        {selectedMenuKey === 'sub7' ? (
+                            <QRCodeScanner onScan={(data) => {
+                                console.log('Quét mã thành công:', data);
+                                // Xử lý dữ liệu quét được tại đây
+                            }} />
+                        ) : selectedMenuKey === 'sub4' ? (
                             <RevenueChart period={period} /> // Gọi component biểu đồ tại đây
                         ) : (
                             <Table

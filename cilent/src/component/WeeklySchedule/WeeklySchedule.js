@@ -47,35 +47,56 @@ export default function WeeklySchedule() {
 
     const isTimeSlotScheduled = (currentDate, hour) => {
         const hourNum = parseInt(hour.split(':')[0]);
-
+        const now = new Date();
+        const currentDateStart = new Date(currentDate);
+        currentDateStart.setHours(hourNum, 0, 0, 0);
+    
+        // Kiểm tra nếu là ngày hiện tại và giờ đã qua
+        if (currentDate.toDateString() === now.toDateString() && currentDateStart < now) {
+            return false; // Không hiển thị các giờ đã qua trong ngày hiện tại
+        }
+    
+        // Kiểm tra các slot tương lai trong cơ sở dữ liệu
         return schedules.some(schedule => {
             const scheduleDate = new Date(schedule.date);
             const isSameDate = currentDate.getFullYear() === scheduleDate.getFullYear() &&
                 currentDate.getMonth() === scheduleDate.getMonth() &&
                 currentDate.getDate() === scheduleDate.getDate();
-
+    
             if (!isSameDate) return false;
-
+    
             const startHour = parseInt(schedule.start_time.split(':')[0]);
             const endHour = parseInt(schedule.end_time.split(':')[0]);
-
+    
+            // Kiểm tra nếu slot nằm trong khung giờ của schedule
             return hourNum >= startHour && hourNum < endHour;
         });
     };
+    
 
     const isTimeSlotBooked = (currentDate, hour) => {
         const hourNum = parseInt(hour.split(':')[0]);
-
+        const now = new Date();
+        const currentDateStart = new Date(currentDate);
+        currentDateStart.setHours(hourNum, 0, 0, 0);
+        
+        // Kiểm tra nếu là ngày hiện tại và giờ đã qua
+        if (currentDate.toDateString() === now.toDateString() && currentDateStart < now) {
+            return true; // Slot đã qua không còn hợp lệ
+        }
+    
+        // Kiểm tra các slot đã được đặt
         return bookedSlots.some(bookedSlot => {
             const bookedDate = new Date(bookedSlot.sessionDate);
             const bookedHour = parseInt(bookedSlot.sessionTime.split(':')[0]);
-
+    
             return currentDate.getFullYear() === bookedDate.getFullYear() &&
                 currentDate.getMonth() === bookedDate.getMonth() &&
                 currentDate.getDate() === bookedDate.getDate() &&
                 hourNum === bookedHour;
         });
     };
+    
 
     const getWeekNumber = (date) => {
         const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
@@ -84,18 +105,26 @@ export default function WeeklySchedule() {
     };
     
     const handleSlotClick = (fullDate, hour) => {
+        const now = new Date();
+        const slotDateTime = new Date(fullDate);
+        slotDateTime.setHours(parseInt(hour));
+        
+        // Kiểm tra nếu slot đã qua
+        if (slotDateTime < now) {
+            toast.error('Không thể chọn thời gian đã qua!');
+            return;
+        }
+
         const slot = { date: fullDate, hour };
         const isSelected = selectedSlots.some(selectedSlot =>
             selectedSlot.date.getTime() === fullDate.getTime() && selectedSlot.hour === hour
         );
     
         if (isSelected) {
-            // Bỏ chọn slot
             setSelectedSlots(prev => {
                 const newSelectedSlots = prev.filter(selectedSlot =>
                     !(selectedSlot.date.getTime() === fullDate.getTime() && selectedSlot.hour === hour)
                 );
-                // Nếu không còn slot nào được chọn, reset firstSelectedWeek
                 if (newSelectedSlots.length === 0) {
                     setFirstSelectedWeek(null);
                 }
@@ -104,9 +133,7 @@ export default function WeeklySchedule() {
             return;
         }
     
-        // Kiểm tra điều kiện nếu có dữ liệu cho weeks và sessionsPerWeek
         if (weeks && sessionsPerWeek) {
-            // Kiểm tra số buổi đã chọn trong tuần hiện tại
             const selectedCount = selectedSlots.filter(slot => 
                 slot.date.toDateString() === fullDate.toDateString()
             ).length;
@@ -116,15 +143,12 @@ export default function WeeklySchedule() {
                 return;
             }
     
-            // Xử lý logic tuần đầu tiên và kiểm tra phạm vi weeks
             const currentWeek = getWeekNumber(fullDate);
     
             if (!firstSelectedWeek && selectedSlots.length === 0) {
-                // Đây là slot đầu tiên được chọn
                 setFirstSelectedWeek(currentWeek);
                 setSelectedSlots(prev => [...prev, slot]);
             } else {
-                // Kiểm tra xem slot mới có nằm trong phạm vi weeks không
                 const weekDiff = Math.abs(currentWeek - firstSelectedWeek);
     
                 if (weekDiff > weeks) {
@@ -135,11 +159,10 @@ export default function WeeklySchedule() {
                 setSelectedSlots(prev => [...prev, slot]);
             }
         } else {
-            // Nếu không có weeks hoặc sessionsPerWeek, chọn bình thường
             setSelectedSlots(prev => [...prev, slot]);
         }
     };
-    
+
     
 
     const isSlotSelected = (fullDate, hour) => {
@@ -149,27 +172,38 @@ export default function WeeklySchedule() {
     };
 
     const prevWeek = () => {
-        setDate(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7));
+        const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7);
+        const now = new Date();
+        
+        // Chỉ cho phép chuyển đến tuần hiện tại hoặc tương lai
+        if (newDate >= now || newDate.toDateString() === now.toDateString()) {
+            setDate(newDate);
+        } else {
+            toast.error('Không thể xem lịch của những tuần đã qua!');
+        }
     };
 
     const nextWeek = () => {
         setDate(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7));
     };
 
+
     const getWeekDays = (date) => {
         const startOfWeek = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1);
-        const currentDate = new Date(); // Ngày hiện tại
+        const now = new Date();
+        now.setHours(0, 0, 0, 0); 
+        console.log('Ngày hiện tại:', now);// Reset time to start of day for comparison
     
         return Array.from({ length: 7 }, (_, i) => {
             const currentWeekDate = new Date(date.getFullYear(), date.getMonth(), startOfWeek + i);
-            const isPastWeek = currentWeekDate < currentDate && currentWeekDate.getDate() !== currentDate.getDate();
+            const isPastDate = currentWeekDate < now;
             
             return {
                 date: currentWeekDate.getDate(),
                 day: currentWeekDate.toLocaleDateString('vi-VN', { weekday: 'short' }),
                 isWeekend: currentWeekDate.getDay() === 0 || currentWeekDate.getDay() === 6,
                 fullDate: currentWeekDate,
-                isPastWeek, // Thêm thuộc tính để kiểm tra tuần trước
+                isPastDate,
             };
         });
     };
@@ -238,7 +272,7 @@ export default function WeeklySchedule() {
 
     return (
         
-        <div className="mt-20 flex flex-col items-center justify-center w-full max-w-7xl mx-auto bg-white rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.3)] p-4 text-black flex-1"> {/* Thay shadow thành shadow-lg */}
+        <div className="mt-20 flex flex-col items-center justify-center w-full max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-4 text-black flex-1">
         <div className="flex items-center justify-between mb-6 w-full">
             <button
                 onClick={prevWeek}
@@ -262,7 +296,7 @@ export default function WeeklySchedule() {
         </div>
     
         <div className="grid grid-cols-8 gap-2 w-full max-w-full ml-[130px] justify-center">
-            {weekDays.map(({ date, day, isWeekend, fullDate }) => (
+            {weekDays.map(({ date, day, isWeekend, fullDate, isPastDate }) => (
                 <div key={date} className="bg-white">
                     <div className={`h-16 p-2 text-center ${isWeekend ? 'bg-gray-100' : ''}`}>
                         <div className="text-sm text-gray-500">{date}</div>
@@ -270,6 +304,18 @@ export default function WeeklySchedule() {
                     </div>
     
                     {hours.map((hour) => {
+                           if (isPastDate) {
+                            return (
+                                <div key={`${date}-${hour}`} className="border-gray-200 flex flex-col gap-1 mb-1">
+                                    <div className="flex items-center justify-center w-full h-[62.5px] text-center bg-gray-300 rounded-md opacity-40 cursor-not-allowed">
+                                        <span className="text-sm font-semibold">{hour}</span>
+                                    </div>
+                                    <div className="flex items-center justify-center w-full h-[62.5px] text-center bg-gray-300 rounded-md opacity-40 cursor-not-allowed">
+                                        <span className="text-sm font-semibold">{`${hour.split(':')[0]}:30`}</span>
+                                    </div>
+                                </div>
+                            );
+                        }
                         const isScheduled = isTimeSlotScheduled(fullDate, hour);
                         const isBooked = isTimeSlotBooked(fullDate, hour);
                         const isSelected = isSlotSelected(fullDate, hour);
@@ -293,7 +339,7 @@ export default function WeeklySchedule() {
                             return (
                                 <div
                                     key={`${date}-${hour}`}
-                                    className={`h-[129px] cursor-pointer flex items-center justify-center mb-1 transition-colors duration-200 ${isSelected ? 'bg-blue-500 text-white' : 'bg-[#d4e2ff] hover:bg-blue-100'}`}
+                                    className={`h-[129px] cursor-pointer flex items-center justify-center mb-1 transition-colors duration-200 ${isSelected ? 'bg-orange-500 text-white' : 'bg-orange-100 hover:bg-orange-200'}`}
                                     onClick={() => handleSlotClick(fullDate, hour)}
                                 >
                                     <div className="text-center text-sm font-semibold w-full h-full flex items-center justify-center">
@@ -322,7 +368,7 @@ export default function WeeklySchedule() {
     
         <div className="mt-4 flex gap-4 text-sm text-gray-600">
             <div className="flex items-center">
-                <div className="w-3 h-3 rounded-full bg-blue-100 mr-2" />
+                <div className="w-3 h-3 rounded-full bg-orange-100 mr-2" />
                 <span>Có sẵn</span>
             </div>
             <div className="flex items-center">

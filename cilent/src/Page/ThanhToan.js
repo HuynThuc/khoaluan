@@ -2,8 +2,8 @@ import BookingHeader from "../component/BookingStep/BookingHeader";
 import Payment from "../component/Payment/Payment"
 import BannerService from "../component/Banner/bannerService";
 import { useLocation, useNavigate } from 'react-router-dom';
-const bookingImage = '/images/booking.jpg';
 
+const bookingImage = '/images/anh-mo-ta.png'; // Hình ảnh mặc định cho trang đặt chỗ
 
 
 function ThanhToan() {

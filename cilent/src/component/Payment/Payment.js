@@ -462,7 +462,7 @@ const BookingConfirmation = () => {
                 onChange={handleChange}
               />
               <span className="text-sm">
-                I agree with SimplyBook.me Terms & Conditions
+               Đồng ý với các điều khoản
                 <span className="text-red-500">*</span>
               </span>
             </label>
@@ -476,7 +476,7 @@ const BookingConfirmation = () => {
                 onChange={handleChange}
               />
               <span className="text-sm">
-                Subscribe to be one of the first to receive our promotions, cool offers, and other relevant information.
+                Đăng kí nhận thông tin
               </span>
             </label>
           </div>
